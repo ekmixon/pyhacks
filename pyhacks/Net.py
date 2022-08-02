@@ -86,8 +86,7 @@ class Net:
     def _query_dns(self, domain, record):
         res = []
         try:
-            for rdata in self.resolver.query(domain, record):
-                res.append(str(rdata))
+            res.extend(str(rdata) for rdata in self.resolver.query(domain, record))
         except:
             pass
         return res

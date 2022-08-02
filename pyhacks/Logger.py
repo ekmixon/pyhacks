@@ -5,15 +5,15 @@ from .constants import *
 
 def verify_key(item, key_name):
 	if type(key_name)!=str:
-		raise Exception("Key type excpected to be str but got {}".format(type(key_name)))
+		raise Exception(f"Key type excpected to be str but got {type(key_name)}")
 	if key_name in item:
 		return True
 	else:
-		raise Exception("Key {} doesn't exist in item: {}".format(key_name, item))
+		raise Exception(f"Key {key_name} doesn't exist in item: {item}")
 
 def verify_keys(item, keys):
 	if type(keys)!=list:
-		raise Exception("Keys type excpected to be list but got {}".format(type(keys)))
+		raise Exception(f"Keys type excpected to be list but got {type(keys)}")
 	for key in keys:
 		verify_key(item, key)
 	return True
@@ -46,9 +46,9 @@ class Logger:
 	def _write(self, file_name, content):
 		try:
 			with open(file_name, "a") as myfile:
-				myfile.write("{}\n".format(content))
+				myfile.write(f"{content}\n")
 		except Exception as err:
-			self.red("Writing error: {}".format(err))
+			self.red(f"Writing error: {err}")
 			os._exit(1)
 
 	def green(self, content, file_name = LOG_FILE_NAME, verbose = True):

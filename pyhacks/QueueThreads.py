@@ -41,11 +41,10 @@ class QueueThreads:
 					self.q.task_done()
 					break
 				item.verify_key("counter")
-				if self.success_list != []:
-					if self.is_item_handled(item):
-						self.logger.debug("Skipping item #{}, already handeled".format(item.get("counter")))
-						self.q.task_done()
-						continue
+				if self.success_list != [] and self.is_item_handled(item):
+					self.logger.debug("Skipping item #{}, already handeled".format(item.get("counter")))
+					self.q.task_done()
+					continue
 
 				self.logger.debug("Handling item #{}".format(item.get("counter")))
 				try:
@@ -62,7 +61,7 @@ class QueueThreads:
 					self.logger.fail(item)
 					self.q.task_done()
 					os._exit(1)
-					
+
 				elif handle_function_result:
 					self.logger.success(item)
 				else:
@@ -83,7 +82,7 @@ class QueueThreads:
 		self.q.put(item)
 
 	def finish(self):
-		for i in range(self.num_worker_threads):
+		for _ in range(self.num_worker_threads):
 			self.q.put(None)
 		for t in self.threads:
 		    t.join()

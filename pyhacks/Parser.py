@@ -20,34 +20,25 @@ class Parser:
             if current_line == 1:
                 keys = row
                 continue
-            obj = {}
-
             if len(keys) != len(row):
                 raise Exception("Malformed CSV file key length != row length")
-            for i in range(len(keys)):
-                obj[keys[i]] = row[i]
-
+            obj = {keys[i]: row[i] for i in range(len(keys))}
             csv_content.append(Item(obj, current_line))
-            
+
         return csv_content
 
     def xml(self, file_name_or_string):
         root = None
         if file_name_or_string.endswith(".xml"):
             tree = ET.parse('country_data.xml')
-            root = tree.getroot()
+            return tree.getroot()
         else:
             it = ET.iterparse(StringIO(file_name_or_string))
             for _, el in it:
                 prefix, has_namespace, postfix = el.tag.partition('}')
                 if has_namespace:
                     el.tag = postfix # strip all namespaces
-            root = it.root
-        # Usage:
-        # for child in root:
-        #    print(child.tag)
-        #    print(child.attrib)
-        return root
+            return it.root
     
     def text(self, file_name, delimiter="\n"):
         textFile = open(file_name,"r").read()
@@ -61,7 +52,7 @@ class Parser:
             counter = counter + 1
             # obj["counter"] = counter
             items.append(Item(obj, counter))
-        
+
         return items
 
             

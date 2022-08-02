@@ -35,14 +35,14 @@ class Exporter:
     
 	def write_txt(self, item):
 		content = ''
-		content = "{}{} ".format(content, item.get('counter'))
+		content = f"{content}{item.get('counter')} "
 		for key in item.keys():
 			if key == 'counter':
 				continue
-			content = "{}{}{}".format(content, item.get(key), self.delimiter)
+			content = f"{content}{item.get(key)}{self.delimiter}"
 
 		with open(self.file_name, "a") as myfile:
-			myfile.write("{}\n".format(content))
+			myfile.write(f"{content}\n")
 
 	def write_csv(self, item):
 		with open(self.file_name, mode='a') as csv_file:
@@ -50,9 +50,7 @@ class Exporter:
 			if csv_file.tell() == 0:
 				# TODO: add quotes to keys
 				csv_writer.writerow(item.keys())
-			data = []
-			for key in item.keys():
-				data.append(item.get(key))
+			data = [item.get(key) for key in item.keys()]
 			csv_writer.writerow(data)
 
 	def put(self, item):
